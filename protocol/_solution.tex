@@ -1,0 +1,243 @@
+\section{Umsetzung}
+
+\subsection{Entities}
+
+Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwendigen Annotationen hinzugefügt. 
+
+\subsubsection{Annotationen}
+
+	Hibernate bietet zur Konfiguration der Entities Annotationen an. 
+	
+	\begin{itemize}
+		\item[] @Entity: wird verwendet um Klassen als Entitäten zu markieren
+		\item[] @Id: legt Attribute als Primary Key fest
+		\item[] @GeneratedValue: erstellt automatisch ID Werte
+		\item[] @Column: kann besondere eigenschaften für die Tabellenspalte festlegen
+		\subitem name: legt den Namen fest
+		\subitem unique: stellt sicher, dass dieser Wert eindeutig ist
+		\item[] @Transient: speichert Attribute nicht in der Datenbank
+		\item[] @OneToOne: eindeutige Beziehung zwischen Enitäten
+		\item[] @OneToMany: legt fest das eine Collection von einer Enität zu mehreren anderen ist
+		\item[] @ManyToOne: legt fest das mehrere Entitäten eine Beziehun zu einer Enität haben
+		\item[] @ManyToMany: erstellt Beziehungen zwischen Collections von Entitäten und mehreren Entitäten
+		\subitem cascade: Legt fest wie die Beziehungen behandelt werden sollen
+		  
+	\end{itemize}
+
+	\begin{code}[]{java}
+	public class Benutzer {
+		
+		@Id
+		@GeneratedValue(strategy = GenerationType.AUTO)
+		private Long ID;
+		
+		@NotNull
+		private String vorName;
+		
+		@NotNull
+		@CorrectEmailConstraint
+		private String eMail;
+		
+		@NotNull
+		private String passwort;
+		
+		@OneToMany(cascade = CascadeType.ALL)
+		private Set<Ticket> tickets;
+		
+		@OneToMany(cascade = CascadeType.ALL)
+		private Set<Reservierung> reservierungen;
+	}
+	\end{code}
+
+	\clearpage
+
+	\subsection{XML-Mapping}
+	
+	Bis auf die Klasse ''Reservierung'' wurden alle mit Annotationen erstellt. ''Reservierung'' wurde mit XML-Mapping erstellt. Dies bietet die Möglichkeit unabhängig von der Klassendatei das Mapping festzulegen. Weiters ist es sinnvoll, wenn es schon eine bestehende Datenbankstruktur gibt.
+	
+	Das Mapping für die Klasse ''xyz'' muss in der Datei ''xyz.hbm.xml'' festgelegt werden.
+	
+	\begin{itemize}
+		\item[] <hibernate-mapping>: Erstellt ein neues Hibernate mapping
+		\item[] <class>: Legt fest für welche Klasse das Mapping gilt
+		\subitem name: Name bzw. Ort der Klasse. Z.b. entity.Reservierung
+		\subitem table: Legt den Name der Datenbanktabelle fest
+		\subitem <id: Legt Primärschlüssel fest
+		\subsubitem name: Name des Attributs
+		\subsubitem <generator>: Legt die Art der Generierung fest
+		\subitem <property>: Legt das Mapping für ein Attribut fest
+		\subsubitem name: Name des Attributs
+		\subsubitem column: Spaltenname
+		\subsubitem type: Klassenname oder Ort
+		\subitem <many-to-one>: So wie property, nur für Many to One. Syntax gilt auch für alle anderen Kardinalitäten.
+	\end{itemize}
+	
+	\begin{code}[]{java}
+		<?xml version = "1.0" encoding = "utf-8"?>
+		<!DOCTYPE hibernate-mapping PUBLIC
+		"-//Hibernate/Hibernate Mapping DTD//EN"
+		"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+		
+		<hibernate-mapping>
+		<class name = "entity.Reservierung" table = "Reservierung">
+		
+		<meta attribute = "class-description">
+		Sis is a reserwayschion.
+		</meta>
+		
+		<id name = "ID" type = "java.lang.Long" column = "id">
+		<generator class="identity"/>
+		</id>
+		
+		<property name = "datum" column = "datum" type = "java.util.Date"/>
+		<property name = "praemienMeilenBonus" column = "praemienMeilenBonus" type = "int"/>
+		<property name = "preis" column = "preis" type = "int"/>
+		<property name = "status" column = "status" type = "entity.StatusInfo"/>
+		<many-to-one cascade="all" name = "benutzer" class = "entity.Benutzer"/>
+		<many-to-one cascade="all" name = "strecke"  class = "entity.Strecke"/>
+		<many-to-one cascade="all" name = "zug" class = "entity.Zug"/>
+		
+		</class>
+		</hibernate-mapping>
+	\end{code}
+	
+	\section{Setup}
+	
+	Das Projekt wurde mit Maven umgesetz.
+	
+	\subsection{Maven}
+	
+	Für Maven wurden folgende Abhängigkeiten in  ''pom.xml'' definitert.
+	
+	\begin{itemize}
+		\item org.hibernate:hibernate-core:5.3.1.Final
+		\item com.h2database:h2:1.4.197
+		\item org.hibernate.validator:hibernate-validator:6.0.10.Final
+		\item org.apache.maven.plugins:maven-surefire-plugin:2.21.0
+		\item junit:junit:4.12
+		\item org.glassfish:javax.el:3.0.1-b08
+	\end{itemize}
+
+	\subsection{Hibernate}
+	
+	Für Hibernate wurde ein ''hibernate.cfg.xml'' erstellt. 
+	
+	\subsubsection{H2}
+	
+	Damit Hibernate mit der H2 Datenbank kommunizieren kann wurde folgendes Konfiguriert:
+	
+	\begin{code}[]{java}
+		<hibernate-configuration>
+		<session-factory>
+		<property name="hibernate.connection.driver_class">org.h2.Driver</property>
+		<property name="connection.url">jdbc:h2:mem:test</property>
+		<property name="connection.username">sa</property>
+		<property name="connection.password"/>
+		<property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
+	\end{code}
+	
+	\subsubsection{Entitäten}
+	
+	Damit die Entitäten von Hibernate erkannt werden wurde folgendes Konfiguriert:
+	
+	\begin{code}[]{java}
+		<mapping class="entity.Bahnhof"/>
+		<mapping class="entity.Benutzer"/>
+		<mapping class="entity.Einzelticket"/>
+		<mapping class="entity.Reservierung"/>
+		<mapping class="entity.Strecke"/>
+		<mapping class="entity.Zeitkarte"/>
+		<mapping class="entity.Zug"/>
+		<mapping class="entity.Sonderangebot"/>
+		
+		<mapping resource="Reservierung.hbm.xml" />
+	\end{code}
+
+	\section{Hibernate}
+	\subsection{Session}
+	Um ein Sessionobjekt zu erstellen, wurd eine Sessionfactory erstellt.
+	
+	\begin{code}[]{java}
+		return new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+	\end{code}
+
+	\subsection{Persistierung}
+	Damit ein Objekt persistiert werden kann muss eine Transaktion erstellt werden. In dieser kann dann die Funktion ''persist'' aufgerufen werden, um eine Entität zu Speichern. 
+	Damit nicht alle Attribute, welche Entitäten sind, einzeln Persistiert werden müssen wurde zu allen ''cascade = CascadeType.ALL'' hinzugefügt.
+	
+	\begin{code}[]{java}
+		session = HibernateUtil.getSessionFactory().openSession();
+		
+		for(int i = 0; i < 20;++i) {
+			session.beginTransaction();
+			Benutzer b = FakeDataGenerator.generateRandomBenutzer();
+			b = FakeDataGenerator.addReservationsToBenutzer(b);
+			benutzers.add(b);
+			
+			session.persist(b);
+			session.getTransaction().commit();
+		}
+	\end{code}
+
+
+	\subsection{Validierung}
+	
+	Mittels Validierungsannotationen können Attribute oder Klassen auf korrektheit überprüft werden.
+	
+	\begin{itemize}
+		\item @NotNull: Attribut darf nicht ''null'' sein
+		\item @Email: Validiert eine Email pattern
+		\item @Pattern: Regex überprüfung von Strings
+		\item @Past: Datum muss in der Vergangenheit liegen
+		\item @Future: Datum miss in der Zukunft liegen
+		\item @FutureOrPresent/@PastOrPresent
+	\end{itemize}
+	
+	\clearpage
+	
+	\subsection{Named Queries}
+	
+	\subsubsection{Syntax von HQL}
+	
+	\begin{itemize} 
+		\item SELECT: ''SELECT''
+		\item Spalten: ''spaltenname'' 
+		\item AS: ''Benutzer ben'' legt eine Kurzbezeichnung für die Klasse fest
+		\item Subqueries: Sind in ''IN'' möglich
+		\item Where: Gleich wie in SQL
+		\item Parameter: '':varname'' kennzeichnet einen Parameter
+	\end{itemize}
+	
+	\subsection{Definition}
+	Die Named-Queries können entweder in ''hibernamte.cfg.xml'' festgelegt werden, order mit Annotationen.
+	
+	\begin{code}[]{java}
+		@NamedQueries({
+			@NamedQuery(
+			name = "ReservationsViaEmail",
+			query = "SELECT reservierungen FROM entity.Benutzer b WHERE b.eMail = :email"
+			)
+		)
+	\end{code}
+	
+	\subsubsection{Aufgaben queries}
+	
+	\begin{enumerate}
+		\item SELECT reservierungen FROM entity.Benutzer b WHERE b.eMail = :email
+		\item SELECT DISTINCT b From entity.Benutzer b, entity.Zeitkarte z WHERE z.typ = entity.ZeitkartenTyp.MONATSKARTE AND b.tickets.ID = z.ID
+		\item SELECT t FROM entity.Ticket t INNER JOIN t.strecke s where s not in (select strecke FROM entity.Reservierung)
+	\end{enumerate}
+	
+	\subsubsection{Aufrufen}
+		Named-queries können mittels der Session abgefragt und ausgeführt werden.
+	\begin{code}[]{java}
+		List<Reservierung> reservierungs = session.getNamedQuery("ReservationsViaEmail").setParameter("email",a.geteMail()).list();
+		
+		Iterator<Reservierung> it = a.getReservierungen().iterator();	
+	\end{code}
+
+	\clearpage
+
+\section{Probleme}
+	
+	
