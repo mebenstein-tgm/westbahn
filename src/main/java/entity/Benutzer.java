@@ -14,7 +14,7 @@ import java.util.Set;
         ),
         @NamedQuery(
                 name = "Montaskarte",
-                query = "SELECT DISTINCT b From entity.Benutzer b, entity.Zeitkarte z WHERE z.typ = entity.ZeitkartenTyp.MONATSKARTE AND b.tickets.ID = z.ID"
+                query = "SELECT DISTINCT b From entity.Benutzer b INNER JOIN b.tickets ticket where ticket in (SELECT m FROM entity.Zeitkarte m WHERE m.typ = entity.ZeitkartenTyp.MONATSKARTE )"
         )
 })
 

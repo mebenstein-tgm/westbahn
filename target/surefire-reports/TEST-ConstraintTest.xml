@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="20" failures="0" name="ConstraintTest" time="3.971" errors="0" skipped="0">
+<testsuite tests="20" failures="0" name="ConstraintTest" time="4.076" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_144\jre\bin"/>
@@ -65,24 +65,24 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="ConstraintTest" name="testEmailWithoutDomainWrong" time="3.823"/>
-  <testcase classname="ConstraintTest" name="testEmailWithSpaceWrong" time="0.004"/>
-  <testcase classname="ConstraintTest" name="testSonderangebotDateFuture" time="0.022"/>
-  <testcase classname="ConstraintTest" name="testEmailWithSpecialWrong" time="0.008"/>
-  <testcase classname="ConstraintTest" name="testStreckeBahnhofsAreSameConstraintTrue" time="0.008"/>
-  <testcase classname="ConstraintTest" name="testEmailWith2AtWrong" time="0.008"/>
-  <testcase classname="ConstraintTest" name="testEmailDotCorrect" time="0.003"/>
-  <testcase classname="ConstraintTest" name="testBahnhofNameSpecial" time="0.005"/>
-  <testcase classname="ConstraintTest" name="testEmailWithoutAtWrong" time="0.008"/>
-  <testcase classname="ConstraintTest" name="testStreckeBahnhofsAreSameConstraintFalse" time="0.016"/>
-  <testcase classname="ConstraintTest" name="testEmailCharsCorrect" time="0.004"/>
-  <testcase classname="ConstraintTest" name="testBahnhofNameDash" time="0.003"/>
-  <testcase classname="ConstraintTest" name="testBahnhofNameLong" time="0.007"/>
-  <testcase classname="ConstraintTest" name="testBahnhofNameShort" time="0.005"/>
-  <testcase classname="ConstraintTest" name="testSonderangebotDatePast" time="0.027"/>
-  <testcase classname="ConstraintTest" name="testEmailJustStringWrong" time="0.003"/>
-  <testcase classname="ConstraintTest" name="testEmailNumbersCorrect" time="0.004"/>
-  <testcase classname="ConstraintTest" name="testBahnhofName150" time="0.007"/>
-  <testcase classname="ConstraintTest" name="testSonderangebotDateNow" time="0.005"/>
-  <testcase classname="ConstraintTest" name="testBahnhofName3" time="0.001"/>
+  <testcase classname="ConstraintTest" name="testEmailWithoutDomainWrong" time="3.993"/>
+  <testcase classname="ConstraintTest" name="testEmailWithSpaceWrong" time="0.001"/>
+  <testcase classname="ConstraintTest" name="testSonderangebotDateFuture" time="0.021"/>
+  <testcase classname="ConstraintTest" name="testEmailWithSpecialWrong" time="0.003"/>
+  <testcase classname="ConstraintTest" name="testStreckeBahnhofsAreSameConstraintTrue" time="0.005"/>
+  <testcase classname="ConstraintTest" name="testEmailWith2AtWrong" time="0.004"/>
+  <testcase classname="ConstraintTest" name="testEmailDotCorrect" time="0.002"/>
+  <testcase classname="ConstraintTest" name="testBahnhofNameSpecial" time="0.001"/>
+  <testcase classname="ConstraintTest" name="testEmailWithoutAtWrong" time="0.002"/>
+  <testcase classname="ConstraintTest" name="testStreckeBahnhofsAreSameConstraintFalse" time="0.008"/>
+  <testcase classname="ConstraintTest" name="testEmailCharsCorrect" time="0"/>
+  <testcase classname="ConstraintTest" name="testBahnhofNameDash" time="0.001"/>
+  <testcase classname="ConstraintTest" name="testBahnhofNameLong" time="0.004"/>
+  <testcase classname="ConstraintTest" name="testBahnhofNameShort" time="0.007"/>
+  <testcase classname="ConstraintTest" name="testSonderangebotDatePast" time="0.005"/>
+  <testcase classname="ConstraintTest" name="testEmailJustStringWrong" time="0.008"/>
+  <testcase classname="ConstraintTest" name="testEmailNumbersCorrect" time="0.001"/>
+  <testcase classname="ConstraintTest" name="testBahnhofName150" time="0"/>
+  <testcase classname="ConstraintTest" name="testSonderangebotDateNow" time="0.01"/>
+  <testcase classname="ConstraintTest" name="testBahnhofName3" time="0"/>
 </testsuite>

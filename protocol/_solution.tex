@@ -24,6 +24,7 @@ Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwend
 		  
 	\end{itemize}
 
+	\begin{listing}
 	\begin{code}[]{java}
 	public class Benutzer {
 		
@@ -48,6 +49,8 @@ Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwend
 		private Set<Reservierung> reservierungen;
 	}
 	\end{code}
+	\caption{Entity Klasse}
+	\end{listing}
 
 	\clearpage
 
@@ -72,6 +75,7 @@ Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwend
 		\subitem <many-to-one>: So wie property, nur für Many to One. Syntax gilt auch für alle anderen Kardinalitäten.
 	\end{itemize}
 	
+	\begin{listing}
 	\begin{code}[]{java}
 		<?xml version = "1.0" encoding = "utf-8"?>
 		<!DOCTYPE hibernate-mapping PUBLIC
@@ -100,6 +104,8 @@ Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwend
 		</class>
 		</hibernate-mapping>
 	\end{code}
+	\caption{XML-Mapping Reservierung}
+	\end{listing}
 	
 	\section{Setup}
 	
@@ -126,6 +132,7 @@ Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwend
 	
 	Damit Hibernate mit der H2 Datenbank kommunizieren kann wurde folgendes Konfiguriert:
 	
+	\begin{listing}
 	\begin{code}[]{java}
 		<hibernate-configuration>
 		<session-factory>
@@ -135,11 +142,14 @@ Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwend
 		<property name="connection.password"/>
 		<property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
 	\end{code}
+	\caption{Hibernate config}
+	\end{listing}
 	
 	\subsubsection{Entitäten}
 	
 	Damit die Entitäten von Hibernate erkannt werden wurde folgendes Konfiguriert:
 	
+	\begin{listing}
 	\begin{code}[]{java}
 		<mapping class="entity.Bahnhof"/>
 		<mapping class="entity.Benutzer"/>
@@ -152,19 +162,25 @@ Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwend
 		
 		<mapping resource="Reservierung.hbm.xml" />
 	\end{code}
+	\caption{Entity Mapping config}
+	\end{listing}
 
 	\section{Hibernate}
 	\subsection{Session}
 	Um ein Sessionobjekt zu erstellen, wurd eine Sessionfactory erstellt.
 	
+	\begin{listing}
 	\begin{code}[]{java}
 		return new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 	\end{code}
+	\caption{Erstellen Session Factory}
+	\end{listing}
 
 	\subsection{Persistierung}
 	Damit ein Objekt persistiert werden kann muss eine Transaktion erstellt werden. In dieser kann dann die Funktion ''persist'' aufgerufen werden, um eine Entität zu Speichern. 
 	Damit nicht alle Attribute, welche Entitäten sind, einzeln Persistiert werden müssen wurde zu allen ''cascade = CascadeType.ALL'' hinzugefügt.
 	
+	\begin{listing}
 	\begin{code}[]{java}
 		session = HibernateUtil.getSessionFactory().openSession();
 		
@@ -178,6 +194,9 @@ Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwend
 			session.getTransaction().commit();
 		}
 	\end{code}
+
+	\caption{Persistierung}
+	\end{listing}
 
 
 	\subsection{Validierung}
@@ -211,6 +230,7 @@ Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwend
 	\subsection{Definition}
 	Die Named-Queries können entweder in ''hibernamte.cfg.xml'' festgelegt werden, order mit Annotationen.
 	
+	\begin{listing}
 	\begin{code}[]{java}
 		@NamedQueries({
 			@NamedQuery(
@@ -220,6 +240,8 @@ Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwend
 		)
 	\end{code}
 	
+	\caption{Definition Named Query}
+	\end{listing}
 	\subsubsection{Aufgaben queries}
 	
 	\begin{enumerate}
@@ -230,14 +252,17 @@ Aus dem UML Diagramm wurden Java Klassen generiert. Zu diesen wurden die Notwend
 	
 	\subsubsection{Aufrufen}
 		Named-queries können mittels der Session abgefragt und ausgeführt werden.
+		
+		
+	\begin{listing}
 	\begin{code}[]{java}
 		List<Reservierung> reservierungs = session.getNamedQuery("ReservationsViaEmail").setParameter("email",a.geteMail()).list();
 		
 		Iterator<Reservierung> it = a.getReservierungen().iterator();	
 	\end{code}
 
-	\clearpage
+	\caption{Aufruf Named Query}
+	\end{listing}
 
-\section{Probleme}
-	
+
 	
